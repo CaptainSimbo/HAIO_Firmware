@@ -1,0 +1,77 @@
+  0001                  TRUE	EQU	1
+  0000                  FALSE	EQU	0
+                        
+                        ;***************************
+                        ;DEFINE REGISTERS
+                        ;****************************
+  0000                  R0	EQU	0
+  0001                  R1	EQU	1
+  0002                  R2	EQU	2
+  0003                  R3	EQU	3
+  0004                  R4	EQU	4
+  0005                  R5	EQU	5
+  0006                  R6	EQU	6
+  0007                  R7	EQU	7
+  0008                  R8	EQU	8
+  0009                  R9	EQU	9
+  000A                  R10	EQU	10
+  000B                  R11	EQU	11
+  000C                  R12	EQU	12
+  000D                  R13	EQU	13
+  000E                  R14	EQU	14
+  000F                  R15	EQU	15
+                        ;
+                        ;---define some DXOP's - These are for this ROM Resident Monitor (TIMON) only
+                        ;
+                        	DXOP	CALL,0		;SUBROUTINE CALL
+                        	DXOP	RET,1		;SUBROUTINE RETURE
+                        	DXOP	READ,2		;READ A CHARACTER
+                        	DXOP	WRITE,3		;WRITE A CHARACTER
+                        	DXOP	PUSHREG,4	;PUSHES R0-RX ONTO STACK	
+                        	DXOP	POPREG,5	;POPS RX- R0 	
+                        
+                        ;
+  000D                  CR	EQU	0DH		;CARRIAGE RETURN
+  000A                  LF	EQU	0AH		;LINE FEED
+                        ;
+                        
+  0300                  WORKSP		EQU		0300H
+                        
+                        ;
+  0080                  CRUBASE 	EQU	80H
+                        ;
+  0200                  	AORG	0200H
+                        ;
+                        
+  0200   2FA0 0206      	XOP 	@HELLO,14
+  0204   2F40           	XOP		R0,13
+                        	
+  0206   4845 4C4C      HELLO TEXT 'HELLO ALANAH'
+  020A   4F20 414C      
+  020E   414E 4148      
+                        
+  0212   02E0 0300      	LWPI	0300H
+  0216   020C 0020      	LI 		R12,0020H
+  021A   1D00           AG 	SBO		0
+  021C   0201 8B82      	LI 		R1,08B82H
+  0220   0601           L1 	DEC	R1
+  0222   16FE           	JNE	L1
+  0224   1E00           	SBZ	0
+                        
+  0226   0201 8B82      	LI 		R1,08B82H
+  022A   0601           L2 	DEC	R1
+  022C   16FE           	JNE	L2
+  022E   10F5           	JMP AG
+                        	
+  0230                  	END
+
+No error(s).
+AG        021A    CALL      2C00    CR        000D    CRUBASE   0080
+FALSE     0000    HELLO     0206    L1        0220    L2        022A
+LF        000A    POPREG    2D40    PUSHREG   2D00    R0        0000
+R1        0001    R10       000A    R11       000B    R12       000C
+R13       000D    R14       000E    R15       000F    R2        0002
+R3        0003    R4        0004    R5        0005    R6        0006
+R7        0007    R8        0008    R9        0009    READ      2C80
+RET       2C40    TRUE      0001    WORKSP    0300    WRITE     2CC0
+
